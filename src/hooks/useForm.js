@@ -8,12 +8,15 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     createValidators();
   }, [formState]);
 
-  const isFormValid = useMemo(()=>{
-    for(const formValue of Object.keys(formValidation)){
-      if (formValidation[formValue!== null]) return false
+  const isFormValid = useMemo(() => {
+
+    for (const formValue of Object.keys(formValidation)) {
+      if (formValidation[formValue] !== null) return false;
     }
-    return true
-  }, [formState])
+
+    return true;
+
+  }, [formValidation]);
 
   const onInputChange = ({ target }) => {
     const { name, value } = target;
@@ -35,8 +38,8 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
         ? null
         : errorMessage;
     }
-    console.log(formCheckedValues)
-    setFormValidation(formCheckedValues)
+    console.log(formCheckedValues);
+    setFormValidation(formCheckedValues);
   };
 
   return {
@@ -45,6 +48,6 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     onInputChange,
     onResetForm,
     ...formValidation,
-    isFormValid
+    isFormValid,
   };
 };
