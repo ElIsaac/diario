@@ -3,6 +3,8 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { Link as RouterLink } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { startCreatingUserWithEmailPassword } from "../../store/thunks";
 
 const formData = {
   email: "",
@@ -20,8 +22,8 @@ const formValidations = {
 };
 
 export const RegisterPage = () => {
-
-  const [formSubmited, setFormSubmited] = useState(false)
+  const dispatch = useDispatch()
+  const [formSubmited, setFormSubmited] = useState(false);
   const {
     email,
     password,
@@ -30,13 +32,16 @@ export const RegisterPage = () => {
     formState,
     isFormValid,
     emailValid,
+
     displayNameValid,
     passwordValid,
   } = useForm(formData, formValidations);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setFormSubmited(true)
+    setFormSubmited(true);
+    if (!isFormValid) return;
+    dispatch(startCreatingUserWithEmailPassword(formState))
   };
 
   return (
@@ -53,7 +58,7 @@ export const RegisterPage = () => {
               value={displayName}
               onChange={onInputChange}
               error={!!displayNameValid && formSubmited}
-              helperText={formSubmited ? displayNameValid : ''}
+              helperText={formSubmited ? displayNameValid : ""}
             ></TextField>
           </Grid>
 
@@ -66,8 +71,8 @@ export const RegisterPage = () => {
               name="email"
               value={email}
               onChange={onInputChange}
-              error={!!emailValid  && formSubmited}
-              helperText={formSubmited ? emailValid : ''}
+              error={!!emailValid && formSubmited}
+              helperText={formSubmited ? emailValid : ""}
             ></TextField>
           </Grid>
 
@@ -80,8 +85,8 @@ export const RegisterPage = () => {
               name="password"
               value={password}
               onChange={onInputChange}
-              error={!!passwordValid  && formSubmited}
-              helperText={formSubmited ? passwordValid : ''}
+              error={!!passwordValid && formSubmited}
+              helperText={formSubmited ? passwordValid : ""}
             ></TextField>
           </Grid>
 
